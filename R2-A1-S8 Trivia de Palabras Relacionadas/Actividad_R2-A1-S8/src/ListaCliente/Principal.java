@@ -1,10 +1,8 @@
 package ListaCliente;
-import java.util.Scanner;
 import javax.swing.JOptionPane;
 
 public class Principal {
     public static void main (String[] args) {
-        Scanner sc = new Scanner(System.in);
         // Se crea una lista enlazada simple para almacenar los clientes
         ListaSimple ls = new ListaSimple();
         
@@ -28,7 +26,7 @@ public class Principal {
                     Cliente nuevo = new Cliente(cedula, name);
                      // Insertar el cliente en la lista
                     ls.inputNodo(nuevo);
-                    System.out.println("Cliente insertado correctamente.");
+                    JOptionPane.showMessageDialog(null, "Cliente insertado correctamente", "Cliente Agregado", JOptionPane.INFORMATION_MESSAGE);
                     break;
                     
                 case 2:
@@ -38,14 +36,13 @@ public class Principal {
                     
                 case 3:
                     // Salir del programa
-                    System.out.println("Gracias por usar el sistema.");
+                    JOptionPane.showMessageDialog(null, "Gracias por usar el sistema", "Sistema de Clientes", JOptionPane.INFORMATION_MESSAGE);
                     break;
                     
                 default:
-                    System.out.println("Opción inexistente. Intente de nuevo.");
+                    JOptionPane.showMessageDialog(null, "Opción inexistente. Intente de nuevo.", "Error", JOptionPane.ERROR_MESSAGE);
             }
         }while(opc != 3); 
 
-        sc.close(); // Cerrar el escáner al final
     }
 }
