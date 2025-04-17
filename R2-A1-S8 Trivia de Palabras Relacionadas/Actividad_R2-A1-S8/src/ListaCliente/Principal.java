@@ -15,20 +15,14 @@ public class Principal {
         do{
          // Mostrar menú al usuario
             JOptionPane.showMessageDialog(null, "Bienvenido al sistema de gestión de clientes", "Sistema de Clientes", JOptionPane.INFORMATION_MESSAGE);
-            JOptionPane.showMessageDialog(null, "Por favor, seleccione una opción del menú\\n"+
-                                            "1. Insertar cliente\n2. Listar clientes hacia la derecha\\n"+ 
-                                            "3. Salir","Sistema de Clientes", JOptionPane.INFORMATION_MESSAGE);
-            opc = sc.nextInt();
-            sc.nextLine();
+            opc=Integer.parseInt(JOptionPane.showInputDialog(null, "Menu:\n1. Insertar cliente\n2. Listar clientes hacia la derecha\n"+ 
+                                            "3. Salir\n\n","Seleccione una opción"));
 
             switch(opc) {
                 case 1:
                     // Insertar cliente
-                    System.out.print("Ingrese la cédula: ");
-                    cedula = sc.nextInt();
-                    sc.nextLine();
-                    System.out.print("Ingrese el nombre: ");
-                    name = sc.nextLine();
+                    cedula = Integer.parseInt(JOptionPane.showInputDialog(null,"Ingrese la cédula del cliente: "));
+                    name = JOptionPane.showInputDialog(null,"Ingrese el nombre del cliente: ");
 
                     // Crear objeto Cliente con los datos ingresados
                     Cliente nuevo = new Cliente(cedula, name);
