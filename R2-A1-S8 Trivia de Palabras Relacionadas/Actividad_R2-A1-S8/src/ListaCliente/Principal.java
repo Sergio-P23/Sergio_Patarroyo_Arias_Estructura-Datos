@@ -1,8 +1,9 @@
 package ListaCliente;
 import java.util.Scanner;
+import javax.swing.JOptionPane;
 
-public class main {
-    public static void main(String[] args) {
+public class Principal {
+    public static void main (String[] args) {
         Scanner sc = new Scanner(System.in);
         // Se crea una lista enlazada simple para almacenar los clientes
         ListaSimple ls = new ListaSimple();
@@ -13,11 +14,10 @@ public class main {
         String name;
         do{
          // Mostrar menú al usuario
-            System.out.println("\n--- MENÚ DE OPCIONES ---");
-            System.out.println("1. Insertar cliente");
-            System.out.println("2. Listar clientes hacia la derecha");
-            System.out.println("3. Salir");
-            System.out.print("Seleccione una opción: ");
+            JOptionPane.showMessageDialog(null, "Bienvenido al sistema de gestión de clientes", "Sistema de Clientes", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Por favor, seleccione una opción del menú\\n"+
+                                            "1. Insertar cliente\n2. Listar clientes hacia la derecha\\n"+ 
+                                            "3. Salir","Sistema de Clientes", JOptionPane.INFORMATION_MESSAGE);
             opc = sc.nextInt();
             sc.nextLine();
 
@@ -28,10 +28,10 @@ public class main {
                     cedula = sc.nextInt();
                     sc.nextLine();
                     System.out.print("Ingrese el nombre: ");
-                    String nombre = sc.nextLine();
+                    name = sc.nextLine();
 
                     // Crear objeto Cliente con los datos ingresados
-                    Cliente nuevo = new Cliente(cedula, nombre);
+                    Cliente nuevo = new Cliente(cedula, name);
                      // Insertar el cliente en la lista
                     ls.inputNodo(nuevo);
                     System.out.println("Cliente insertado correctamente.");
@@ -51,5 +51,7 @@ public class main {
                     System.out.println("Opción inexistente. Intente de nuevo.");
             }
         }while(opc != 3); 
+
+        sc.close(); // Cerrar el escáner al final
     }
 }
