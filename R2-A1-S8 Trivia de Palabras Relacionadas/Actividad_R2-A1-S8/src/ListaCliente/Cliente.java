@@ -27,7 +27,7 @@ public class Cliente {
     
     // Método para mostrar datos del cliente
     public String ShowData(){
-        return "Cedula: "+cedula+" -  Nombre: "+name;
+        return "| Cedula: "+cedula+"  -  Nombre: "+name+" |";
     }
     
 }

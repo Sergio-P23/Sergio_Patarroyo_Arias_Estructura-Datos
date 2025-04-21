@@ -21,12 +21,10 @@ public class ListaSimple {
         if (cabeza == null || cliente.getCedula() < cabeza.cliente.getCedula()) {
         nuevoNodo.siguiente = cabeza;
         cabeza = nuevoNodo;
-
             // Si la lista estaba vacía, también actualiza 'ultimo'
             if (ultimo == null) {
                 ultimo = nuevoNodo;
                 }
-
         return;
         }
 
@@ -44,8 +42,8 @@ public class ListaSimple {
         if (nuevoNodo.siguiente == null) {
         ultimo = nuevoNodo;
         }
-        
     }
+    
     // Método para mostrar todos los datos de los clientes en la lista
     public void verList(){
         Nodo actual = cabeza; //Comenzamos desde la cabeza
