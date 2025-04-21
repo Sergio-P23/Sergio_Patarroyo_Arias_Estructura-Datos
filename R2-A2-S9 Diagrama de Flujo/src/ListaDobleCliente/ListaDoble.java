@@ -65,7 +65,7 @@ public class ListaDoble {
 
         JOptionPane.showMessageDialog(null,
             listaClientes.length() > 0 ? listaClientes.toString() : "No hay clientes en la lista.",
-            "Lista de Clientes", JOptionPane.INFORMATION_MESSAGE);
+            "Lista de Clientes                    Cantidad: "+numElem, JOptionPane.INFORMATION_MESSAGE);
     }
 
     public void ListRight(){
@@ -79,6 +79,6 @@ public class ListaDoble {
 
         JOptionPane.showMessageDialog(null,
             listaClientes.length() > 0 ? listaClientes.toString() : "No hay clientes en la lista.",
-            "Lista de Clientes", JOptionPane.INFORMATION_MESSAGE);
+            "Lista de Clientes                    Cantidad: "+numElem, JOptionPane.INFORMATION_MESSAGE);
     }
 }
