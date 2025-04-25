@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Clientes - Vista</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <style>
+        body {
+            padding: 20px;
+            background-color: #f8f9fa;
+        }
+        .card {
+            margin-bottom: 20px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .client-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 15px;
+            border-bottom: 1px solid #eee;
+        }
+        #resultContainer {
+            min-height: 200px;
+            padding: 15px;
+        }
+        .btn-menu {
+            height: 80px;
+            font-size: 1.1rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="card-header bg-primary text-white">
+                        <h3 class="text-center mb-0">Gestión de Clientes - Lista Doble</h3>
+                    </div>
+                    <div class="card-body">
+                        <!-- Menú de opciones -->
+                        <div class="row g-3 mb-4">
+                            <div class="col-md-4">
+                                <button class="btn btn-success w-100 btn-menu" data-bs-toggle="modal" data-bs-target="#insertarModal">
+                                    <i class="bi bi-person-plus"></i><br>Insertar Cliente
+                                </button>
+                            </div>
+                            <div class="col-md-4">
+                                <button class="btn btn-info w-100 btn-menu" id="btnListarDerecha">
+                                    <i class="bi bi-arrow-right"></i><br>Listar (Derecha)
+                                </button>
+                            </div>
+                            <div class="col-md-4">
+                                <button class="btn btn-warning w-100 btn-menu" id="btnListarIzquierda">
+                                    <i class="bi bi-arrow-left"></i><br>Listar (Izquierda)
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <!-- Área de resultados -->
+                        <div class="card">
+                            <div class="card-header bg-secondary text-white d-flex justify-content-between align-items-center">
+                                <span>Resultados</span>
+                                <span id="contadorClientes" class="badge bg-light text-dark">0 clientes</span>
+                            </div>
+                            <div class="card-body" id="resultContainer">
+                                <div class="text-center text-muted">
+                                    <i class="bi bi-info-circle" style="font-size: 2rem;"></i>
+                                    <p class="mt-2">Seleccione una opción del menú</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal para Insertar Cliente -->
+    <div class="modal fade" id="insertarModal" tabindex="-1" aria-labelledby="insertarModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="insertarModalLabel">Nuevo Cliente</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="clienteForm">
+                        <div class="mb-3">
+                            <label for="cedula" class="form-label">Cédula</label>
+                            <input type="number" class="form-control" id="cedula" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="nombre" class="form-label">Nombre</label>
+                            <input type="text" class="form-control" id="nombre" required>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-primary" id="btnGuardarCliente">Guardar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS y dependencias -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        // Elementos del DOM
+        const btnGuardarCliente = document.getElementById('btnGuardarCliente');
+        const btnListarDerecha = document.getElementById('btnListarDerecha');
+        const btnListarIzquierda = document.getElementById('btnListarIzquierda');
+        const resultContainer = document.getElementById('resultContainer');
+        const contadorClientes = document.getElementById('contadorClientes');
+        
+        // Función para mostrar mensajes en el contenedor de resultados
+        function mostrarMensaje(mensaje, tipo = 'info') {
+            const alertTypes = {
+                'success': 'alert-success',
+                'error': 'alert-danger',
+                'warning': 'alert-warning',
+                'info': 'alert-info'
+            };
+            
+            resultContainer.innerHTML = `
+                <div class="alert ${alertTypes[tipo]} alert-dismissible fade show">
+                    ${mensaje}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            `;
+        }
+        
+        // Función para mostrar la lista de clientes
+        function mostrarClientes(clientes, direccion = 'derecha') {
+            if (!clientes || clientes.length === 0) {
+                mostrarMensaje('No hay clientes registrados.', 'warning');
+                contadorClientes.textContent = '0 clientes';
+                return;
+            }
+            
+            let html = '<div class="list-group">';
+            
+            // Determinar el orden de visualización
+            const listaMostrar = direccion === 'derecha' ? clientes : [...clientes].reverse();
+            
+            listaMostrar.forEach(cliente => {
+                html += `
+                    <div class="list-group-item client-item">
+                        <div>
+                            <strong>Cédula:</strong> ${cliente.cedula}
+                        </div>
+                        <div>
+                            <strong>Nombre:</strong> ${cliente.nombre}
+                        </div>
+                    </div>
+                `;
+            });
+            
+            html += '</div>';
+            resultContainer.innerHTML = html;
+            contadorClientes.textContent = `${clientes.length} ${clientes.length === 1 ? 'cliente' : 'clientes'}`;
+        }
+        
+        // Evento para guardar cliente
+        btnGuardarCliente.addEventListener('click', async () => {
+            const cedula = document.getElementById('cedula').value;
+            const nombre = document.getElementById('nombre').value;
+            
+            if (!cedula || !nombre) {
+                mostrarMensaje('Por favor complete todos los campos', 'error');
+                return;
+            }
+            
+            try {
+                // Enviar datos al backend (AJAX)
+                const response = await fetch('/tu-endpoint-insertar', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ cedula, nombre })
+                });
+                
+                if (!response.ok) throw new Error('Error en la respuesta del servidor');
+                
+                const data = await response.json();
+                
+                // Cerrar modal y limpiar formulario
+                const modal = bootstrap.Modal.getInstance(document.getElementById('insertarModal'));
+                modal.hide();
+                document.getElementById('clienteForm').reset();
+                
+                // Mostrar mensaje de éxito
+                mostrarMensaje('Cliente insertado correctamente', 'success');
+                
+            } catch (error) {
+                console.error('Error:', error);
+                mostrarMensaje('Error al insertar el cliente: ' + error.message, 'error');
+            }
+        });
+        
+        // Evento para listar clientes (derecha)
+        btnListarDerecha.addEventListener('click', async () => {
+            try {
+                // Obtener clientes del backend (AJAX)
+                const response = await fetch('/tu-endpoint-listar?direccion=derecha');
+                
+                if (!response.ok) throw new Error('Error al obtener clientes');
+                
+                const clientes = await response.json();
+                mostrarClientes(clientes, 'derecha');
+                
+            } catch (error) {
+                console.error('Error:', error);
+                mostrarMensaje('Error al obtener clientes: ' + error.message, 'error');
+            }
+        });
+        
+        // Evento para listar clientes (izquierda)
+        btnListarIzquierda.addEventListener('click', async () => {
+            try {
+                // Obtener clientes del backend (AJAX)
+                const response = await fetch('/tu-endpoint-listar?direccion=izquierda');
+                
+                if (!response.ok) throw new Error('Error al obtener clientes');
+                
+                const clientes = await response.json();
+                mostrarClientes(clientes, 'izquierda');
+                
+            } catch (error) {
+                console.error('Error:', error);
+                mostrarMensaje('Error al obtener clientes: ' + error.message, 'error');
+            }
+        });
+    </script>
+</body>
+</html>
