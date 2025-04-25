@@ -33,6 +33,7 @@ public class Principal {
                     case 4:
                         JOptionPane.showMessageDialog(null, "Gracias por usar el sistema.");
                         break;
+                        
 
                     default:
                         JOptionPane.showMessageDialog(null, "Opción inválida.");
