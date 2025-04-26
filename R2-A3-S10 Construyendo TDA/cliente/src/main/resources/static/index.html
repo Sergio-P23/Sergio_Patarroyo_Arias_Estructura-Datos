@@ -209,7 +209,7 @@
         btnListarDerecha.addEventListener('click', async () => {
             try {
                 // Obtener clientes del backend (AJAX)
-                const response = await fetch('/tu-endpoint-listar?direccion=derecha');
+                const response = await fetch('/endpoint-listar?direccion=derecha');
                 
                 if (!response.ok) throw new Error('Error al obtener clientes');
                 
@@ -226,7 +226,7 @@
         btnListarIzquierda.addEventListener('click', async () => {
             try {
                 // Obtener clientes del backend (AJAX)
-                const response = await fetch('/tu-endpoint-listar?direccion=izquierda');
+                const response = await fetch('/endpoint-listar?direccion=izquierda');
                 
                 if (!response.ok) throw new Error('Error al obtener clientes');
                 
