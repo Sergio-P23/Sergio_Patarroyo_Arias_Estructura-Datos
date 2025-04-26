@@ -10,7 +10,7 @@ import java.util.List;
 public class ClienteController {
      private final ListaDoble lista = new ListaDoble();
 
-    @PostMapping("/tu-endpoint-insertar")
+    @PostMapping("/endpoint-insertar")
     public String insertar(@RequestBody Cliente cliente) {
         lista.insertar(cliente);
         return "{\"mensaje\":\"Cliente insertado correctamente\"}";
@@ -27,3 +27,4 @@ public class ClienteController {
         }
     }   
 }
+ 

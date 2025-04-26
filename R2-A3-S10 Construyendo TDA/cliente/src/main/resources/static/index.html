@@ -147,7 +147,7 @@
             let html = '<div class="list-group">';
             
             // Determinar el orden de visualización
-            const listaMostrar = direccion === 'derecha' ? clientes : [...clientes].reverse();
+            const listaMostrar = clientes ;
             
             listaMostrar.forEach(cliente => {
                 html += `
@@ -179,7 +179,7 @@
             
             try {
                 // Enviar datos al backend (AJAX)
-                const response = await fetch('/tu-endpoint-insertar', {
+                const response = await fetch('/endpoint-insertar', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
