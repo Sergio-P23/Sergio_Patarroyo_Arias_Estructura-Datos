@@ -1,7 +1,9 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
+    <!--codificacion que soporta mas caracteres-->
     <meta charset="UTF-8">
+    <!--establece el ancho y zoom para un device-->
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sistema de Clientes - Vista</title>
     <!-- Bootstrap CSS -->
@@ -127,7 +129,7 @@
                 'warning': 'alert-warning',
                 'info': 'alert-info'
             };
-            
+            //modificando el contenedor de resultados para mostrar mensajes
             resultContainer.innerHTML = `
                 <div class="alert ${alertTypes[tipo]} alert-dismissible fade show">
                     ${mensaje}
@@ -138,17 +140,21 @@
         
         // Función para mostrar la lista de clientes
         function mostrarClientes(clientes, direccion = 'derecha') {
+            //condicion si no hay clientes - condicion estricta o si esta vacia
+            // mismo tipo y valor '==='
             if (!clientes || clientes.length === 0) {
+                //mensaje, tipo
                 mostrarMensaje('No hay clientes registrados.', 'warning');
+                //cambia el texto del contador de clientes
                 contadorClientes.textContent = '0 clientes';
                 return;
             }
             
+            //variable para construir el HTML de la lista de clientes
             let html = '<div class="list-group">';
             
-            // Determinar el orden de visualización
             const listaMostrar = clientes ;
-            
+            //recorremos y agregamos al html
             listaMostrar.forEach(cliente => {
                 html += `
                     <div class="list-group-item client-item">
@@ -163,6 +169,7 @@
             });
             
             html += '</div>';
+            //insertar el HTML en el contenedor de resultados
             resultContainer.innerHTML = html;
             contadorClientes.textContent = `${clientes.length} ${clientes.length === 1 ? 'cliente' : 'clientes'}`;
         }
@@ -172,26 +179,34 @@
             const cedula = document.getElementById('cedula').value;
             const nombre = document.getElementById('nombre').value;
             
+            //si no tienen valor
             if (!cedula || !nombre) {
                 mostrarMensaje('Por favor complete todos los campos', 'error');
                 return;
             }
             
+            //menejamos errores
             try {
-                // Enviar datos al backend (AJAX)
+                // Enviar datos al backend
                 const response = await fetch('/endpoint-insertar', {
+                    //enviaremos datos
                     method: 'POST',
+                    //info adicional de la peticion
                     headers: {
+                        //indicamos al servidor que es JSON
                         'Content-Type': 'application/json',
                     },
-                    body: JSON.stringify({ cedula, nombre })
+                    //cuerpo de la peticion
+                    body: JSON.stringify({ cedula, nombre })//stringify convierte el objeto a JSON
                 });
                 
+                //si no fue exitosa lanzamos un error
                 if (!response.ok) throw new Error('Error en la respuesta del servidor');
                 
+                //leemos la respuesta del servidor y convertimos de JSON a objeto
                 const data = await response.json();
                 
-                // Cerrar modal y limpiar formulario
+                // Cerrar modal y limpiar formulario al guardar un cliente
                 const modal = bootstrap.Modal.getInstance(document.getElementById('insertarModal'));
                 modal.hide();
                 document.getElementById('clienteForm').reset();
@@ -211,8 +226,10 @@
                 // Obtener clientes del backend (AJAX)
                 const response = await fetch('/endpoint-listar?direccion=derecha');
                 
+                //si la respuesta por el await no es exitosa lanzamos un error
                 if (!response.ok) throw new Error('Error al obtener clientes');
                 
+                //parseamos la respuesta a JSON y la guardamos en una variable
                 const clientes = await response.json();
                 mostrarClientes(clientes, 'derecha');
                 
@@ -228,8 +245,10 @@
                 // Obtener clientes del backend (AJAX)
                 const response = await fetch('/endpoint-listar?direccion=izquierda');
                 
+                //si la respuesta por el await no es exitosa lanzamos un error
                 if (!response.ok) throw new Error('Error al obtener clientes');
                 
+                //parseamos la respuesta a JSON y la guardamos en una variable
                 const clientes = await response.json();
                 mostrarClientes(clientes, 'izquierda');
                 
