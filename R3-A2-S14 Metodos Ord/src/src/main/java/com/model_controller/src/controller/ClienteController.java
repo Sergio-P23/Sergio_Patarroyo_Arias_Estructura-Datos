@@ -23,9 +23,16 @@ public class ClienteController{
     }
 
     //se ejecuta cuando se hace una peticion GET a la URL /tu-endpoint-listar
-    @GetMapping("/endpoint-listarDer")
+     
+
+    @GetMapping("/endpoint-listarOriginal")
     //funcion listar que recibe un parametro de consulta "direccion" y retorna una lista de clientes
-    public List<Cliente> listar() {
-        return lista.getClientesDer();
-    }   
+    public List<Cliente> listarOriginal() {
+        return lista.getClientesOriginal();
+    }  
+
+     @GetMapping("/endpoint-bubbleSort")
+    public List<Cliente> listarBubbleSort(){
+        return lista.bubbleSort();
+    }
 }

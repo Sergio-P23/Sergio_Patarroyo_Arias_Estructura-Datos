@@ -194,8 +194,13 @@
                                     <i class="bi bi-arrow-right-circle-fill"></i>Listar
                                 </button>
                             </div>
+                             <div class="col-md-4">
+                                <button class="btn btn-warning w-100 btn-menu" id="btnBubbleSort">
+                                    <i class="bi bi-journal-arrow-down"></i>Bubble sort
+                                </button>
+                            </div>
                             <div class="col-md-4">
-                                <button class="btn btn-warning w-100 btn-menu" id="btnSalir">
+                                <button class="btn btn-danger w-100 btn-menu" id="btnSalir">
                                     <i class="bi bi-x-circle-fill"></i>Salir
                                 </button>
                             </div>
@@ -252,8 +257,11 @@
     <script>
         // Elementos del DOM
         const btnGuardarCliente = document.getElementById('btnGuardarCliente');
+
         const btnListarDerecha = document.getElementById('btnListarDerecha');
+        const btnBubbleSort = document.getElementById('btnBubbleSort');
         const btnSalir = document.getElementById('btnSalir');
+
         const resultContainer = document.getElementById('resultContainer');
         const contadorClientes = document.getElementById('contadorClientes');
 
@@ -330,10 +338,23 @@
             }
         });
 
+        // Bubble sort
+        btnBubbleSort.addEventListener('click', async () => {
+            try {
+                const response = await fetch('/endpoint-bubbleSort');
+                if (!response.ok) throw new Error('No se pudo obtener la listar con Bubblesort.');
+                const clientes = await response.json();
+                mostrarClientes(clientes);
+            } catch (error) {
+                console.error(error);
+                mostrarMensaje('Error: ' + error.message, 'error');
+            }
+        });
+
         // Listar clientes
         btnListarDerecha.addEventListener('click', async () => {
             try {
-                const response = await fetch('/endpoint-listarDer');
+                const response = await fetch('/endpoint-listarOriginal');
                 if (!response.ok) throw new Error('No se pudo obtener la lista de clientes.');
                 const clientes = await response.json();
                 mostrarClientes(clientes);
