@@ -168,7 +168,10 @@
         <button class="welcome-button mt-5" onclick="document.getElementById('bienvenida').classList.remove('ver');
                     document.getElementById('bienvenida').classList.add('ocultar'); 
                     document.getElementById('GestionClientes').classList.remove('ocultar'); 
-                    document.getElementById('GestionClientes').classList.add('ver')">Ingresar</button>
+                    document.getElementById('GestionClientes').classList.add('ver')
+                    document.getElementById('insertarModal').classList.remove('ocultar'); 
+                    document.getElementById('insertarModal').classList.add('ver')">Ingresar</button>
+                    
 
     </div>
 
@@ -218,8 +221,7 @@
     </div>
 
     <!-- Modal -->
-    <div class="modal fade" id="insertarModal" tabindex="-1" aria-labelledby="insertarModalLabel" aria-hidden="true"
-        id="GestionClientes">
+    <div class="modal fade" id="insertarModal" tabindex="-1" aria-labelledby="insertarModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -240,7 +242,7 @@
                 </div>
                 <div class="modal-footer">
                     <button class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                    <button class="btn btn-primary" id="btnGuardarCliente">Guardar</button>
+                    <button type="button" class="btn btn-primary" id="btnGuardarCliente">Guardar</button>
                 </div>
             </div>
         </div>
