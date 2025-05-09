@@ -19,6 +19,7 @@
         <module>R2-A1-S8 Trivia de Palabras Relacionadas</module>
         <module>R2-A2-S9 Diagrama de Flujo</module>
         <module>R2-A3-S10 Construyendo TDA/cliente</module>
+        <module>R3-A2-S14 Metodos Ord/src</module>
     </modules>
 
     <dependencyManagement>
