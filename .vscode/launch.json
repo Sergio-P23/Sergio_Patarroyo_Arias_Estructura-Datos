@@ -9,6 +9,16 @@
             "projectName": "cliente",
             "args": "",
             "envFile": "${workspaceFolder}/.env"
+        },
+        {
+            "type": "java",
+            "name": "Spring Boot-SrcApplication<src>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "com.model_controller.src.SrcApplication",
+            "projectName": "src",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
         }
     ]
 }

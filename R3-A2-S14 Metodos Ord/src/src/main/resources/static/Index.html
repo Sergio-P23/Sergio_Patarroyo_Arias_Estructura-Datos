@@ -257,130 +257,97 @@
         const resultContainer = document.getElementById('resultContainer');
         const contadorClientes = document.getElementById('contadorClientes');
 
-        // Función para mostrar mensajes en el contenedor de resultados
+        // Función para mostrar mensajes
         function mostrarMensaje(mensaje, tipo = 'info') {
             const alertTypes = {
-                'success': 'alert-success',
-                'error': 'alert-danger',
-                'warning': 'alert-warning',
-                'info': 'alert-info'
+                success: 'alert-success',
+                error: 'alert-danger',
+                warning: 'alert-warning',
+                info: 'alert-info'
             };
-            //modificando el contenedor de resultados para mostrar mensajes
+
             resultContainer.innerHTML = `
                 <div class="alert ${alertTypes[tipo]} alert-dismissible fade show">
                     ${mensaje}
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
                 </div>
             `;
         }
 
-        // Función para mostrar la lista de clientes
-        function mostrarClientes(clientes, direccion = 'derecha') {
-            //condicion si no hay clientes - condicion estricta o si esta vacia
-            // mismo tipo y valor '==='
+        // Función para mostrar lista simplemente enlazada
+        function mostrarClientes(clientes) {
             if (!clientes || clientes.length === 0) {
-                //mensaje, tipo
                 mostrarMensaje('No hay clientes registrados.', 'warning');
-                //cambia el texto del contador de clientes
                 contadorClientes.textContent = '0 clientes';
                 return;
             }
 
-            //variable para construir el HTML de la lista de clientes
-            let html = '<div class="list-group">';
-
-            const listaMostrar = clientes;
-            //recorremos y agregamos al html
-            listaMostrar.forEach(cliente => {
+            let html = '<ul class="list-group">';
+            clientes.forEach(cliente => {
                 html += `
-                    <div class="list-group-item client-item">
-                        <div>
-                            <strong>Cédula:</strong> ${cliente.cedula}
-                        </div>
-                        <div>
-                            <strong>Nombre:</strong> ${cliente.nombre}
-                        </div>
-                    </div>
+                    <li class="list-group-item client-item">
+                        <strong>${cliente.nombre}</strong> - Cédula: ${cliente.cedula}
+                    </li>
                 `;
             });
+            html += '</ul>';
 
-            html += '</div>';
-            //insertar el HTML en el contenedor de resultados
             resultContainer.innerHTML = html;
             contadorClientes.textContent = `${clientes.length} ${clientes.length === 1 ? 'cliente' : 'clientes'}`;
         }
 
-        // Evento para guardar cliente
-        btnGuardarCliente.addEventListener('click', async () => {
-            const cedula = document.getElementById('cedula').value;
-            const nombre = document.getElementById('nombre').value;
+        // Insertar cliente
+        btnGuardarCliente.addEventListener('click', async (event) => {
+            event.preventDefault();
 
-            //si no tienen valor
+            const cedula = document.getElementById('cedula').value.trim();
+            const nombre = document.getElementById('nombre').value.trim();
+
             if (!cedula || !nombre) {
-                mostrarMensaje('Por favor complete todos los campos', 'error');
+                mostrarMensaje('Complete todos los campos.', 'error');
                 return;
             }
 
-            //menejamos errores
             try {
-                // Enviar datos al backend
                 const response = await fetch('/endpoint-insertar', {
-                    //enviaremos datos
                     method: 'POST',
-                    //info adicional de la peticion
-                    headers: {
-                        //indicamos al servidor que es JSON
-                        'Content-Type': 'application/json',
-                    },
-                    //cuerpo de la peticion
-                    body: JSON.stringify({ cedula, nombre })//stringify convierte el objeto a JSON
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ cedula, nombre })
                 });
 
-                //si no fue exitosa lanzamos un error
-                if (!response.ok) throw new Error('Error en la respuesta del servidor');
+                if (!response.ok) throw new Error('Error al insertar cliente.');
 
-                //leemos la respuesta del servidor y convertimos de JSON a objeto
                 const data = await response.json();
 
-                // Cerrar modal y limpiar formulario al guardar un cliente
-                const modal = bootstrap.Modal.getInstance(document.getElementById('insertarModal'));
-                modal.hide();
+                bootstrap.Modal.getInstance(document.getElementById('insertarModal')).hide();
                 document.getElementById('clienteForm').reset();
 
-                // Mostrar mensaje de éxito
-                mostrarMensaje('Cliente insertado correctamente', 'success');
+                mostrarMensaje('Cliente agregado correctamente.', 'success');
 
             } catch (error) {
-                console.error('Error:', error);
-                mostrarMensaje('Error al insertar el cliente: ' + error.message, 'error');
+                console.error(error);
+                mostrarMensaje('Error: ' + error.message, 'error');
             }
         });
 
-        // Evento para listar clientes (derecha)
+        // Listar clientes
         btnListarDerecha.addEventListener('click', async () => {
             try {
-                // Obtener clientes del backend (AJAX)
-                const response = await fetch('/endpoint-listar?direccion=derecha');
-
-                //si la respuesta por el await no es exitosa lanzamos un error
-                if (!response.ok) throw new Error('Error al obtener clientes');
-
-                //parseamos la respuesta a JSON y la guardamos en una variable
+                const response = await fetch('/endpoint-listarDer');
+                if (!response.ok) throw new Error('No se pudo obtener la lista de clientes.');
                 const clientes = await response.json();
-                mostrarClientes(clientes, 'derecha');
-
+                mostrarClientes(clientes);
             } catch (error) {
-                console.error('Error:', error);
-                mostrarMensaje('Error al obtener clientes: ' + error.message, 'error');
+                console.error(error);
+                mostrarMensaje('Error: ' + error.message, 'error');
             }
         });
 
-        // Evento para listar clientes (izquierda)
-        btnSalir.addEventListener('click', async () => {
-            document.getElementById('GestionClientes').classList.remove('ver');
+        // Salir a pantalla de bienvenida
+        btnSalir.addEventListener('click', () => {
             document.getElementById('GestionClientes').classList.add('ocultar');
-
-            document.getElementById('bienvenida').classList.remove('ocultar');      
+            document.getElementById('GestionClientes').classList.remove('ver');
+            document.getElementById('bienvenida').classList.remove('ocultar');
             document.getElementById('bienvenida').classList.add('ver');
         });
     </script>
