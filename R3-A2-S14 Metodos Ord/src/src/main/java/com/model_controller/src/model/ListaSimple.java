@@ -6,7 +6,7 @@ import java.util.List;
 public class ListaSimple {
     // Referencia al primer y último nodo de la lista
     Nodo cabeza;
-    Nodo ultimo; 
+    Nodo ultimo;
     private int numElem;
 
     // Lista auxiliar para mantener el orden original
@@ -17,7 +17,7 @@ public class ListaSimple {
         cabeza = null;
         ultimo = null;
         numElem = 0;
-    }    
+    }
 
     // Método para agregar un nuevo nodo a la lista
     public void inputNodo(Cliente cliente) {
@@ -68,6 +68,42 @@ public class ListaSimple {
                 siguiente = siguiente.siguiente;
             }
         } while (huboIntercambio); // Repetimos mientras haya intercambios
+
+        // Devolvemos la lista ordenada
+        return getClientes();
+    }
+
+    // Método para ordenar los clientes usando el algoritmo Selection Sort
+    public List<Cliente> selectionSort() {
+        if (cabeza == null || cabeza.siguiente == null) {
+            // Si la lista está vacía o tiene un solo elemento, no hay nada que ordenar
+            return getClientes();
+        }
+
+        Nodo actual = cabeza;
+
+        while (actual != null) {
+            Nodo menor = actual;
+            Nodo siguiente = actual.siguiente;
+
+            // Encontramos el nodo con el menor valor de cédula en el resto de la lista
+            while (siguiente != null) {
+                if (siguiente.cliente.getCedula() < menor.cliente.getCedula()) {
+                    menor = siguiente;
+                }
+                siguiente = siguiente.siguiente;
+            }
+
+            // Intercambiamos los datos del nodo actual con el nodo menor
+            if (menor != actual) {
+                Cliente temp = actual.cliente;
+                actual.cliente = menor.cliente;
+                menor.cliente = temp;
+            }
+
+            // Avanzamos al siguiente nodo
+            actual = actual.siguiente;
+        }
 
         // Devolvemos la lista ordenada
         return getClientes();

@@ -191,12 +191,17 @@
                             </div>
                             <div class="col-md-4">
                                 <button class="btn btn-primary w-100 btn-menu" id="btnListarDerecha">
-                                    <i class="bi bi-arrow-right-circle-fill"></i>Listar
+                                    <i class="bi bi-arrow-right-circle-fill"></i>Listar Original
                                 </button>
                             </div>
                              <div class="col-md-4">
                                 <button class="btn btn-warning w-100 btn-menu" id="btnBubbleSort">
                                     <i class="bi bi-journal-arrow-down"></i>Bubble sort
+                                </button>
+                            </div>
+                            <div class="col-md-4">
+                                <button class="btn btn-warning w-100 btn-menu" id="btnSelectionSort">
+                                    <i class="bi bi-chevron-double-right"></i>Selection sort
                                 </button>
                             </div>
                             <div class="col-md-4">
@@ -260,6 +265,7 @@
 
         const btnListarDerecha = document.getElementById('btnListarDerecha');
         const btnBubbleSort = document.getElementById('btnBubbleSort');
+        const btnSelectionSort = document.getElementById('btnSelectionSort');
         const btnSalir = document.getElementById('btnSalir');
 
         const resultContainer = document.getElementById('resultContainer');
@@ -339,6 +345,32 @@
         });
 
         // Bubble sort
+        btnBubbleSort.addEventListener('click', async () => {
+            try {
+                const response = await fetch('/endpoint-bubbleSort');
+                if (!response.ok) throw new Error('No se pudo obtener la listar con Bubblesort.');
+                const clientes = await response.json();
+                mostrarClientes(clientes);
+            } catch (error) {
+                console.error(error);
+                mostrarMensaje('Error: ' + error.message, 'error');
+            }
+        });
+
+        // Secuencial
+        btnSelectionSort.addEventListener('click', async () => {
+            try {
+                const response = await fetch('/endpoint-selectionSort');
+                if (!response.ok) throw new Error('No se pudo obtener la listar con Secuencial.');
+                const clientes = await response.json();
+                mostrarClientes(clientes);
+            } catch (error) {
+                console.error(error);
+                mostrarMensaje('Error: ' + error.message, 'error');
+            }
+        });
+
+        //bubble sort
         btnBubbleSort.addEventListener('click', async () => {
             try {
                 const response = await fetch('/endpoint-bubbleSort');

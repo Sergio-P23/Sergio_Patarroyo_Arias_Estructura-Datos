@@ -23,8 +23,6 @@ public class ClienteController{
     }
 
     //se ejecuta cuando se hace una peticion GET a la URL /tu-endpoint-listar
-     
-
     @GetMapping("/endpoint-listarOriginal")
     //funcion listar que recibe un parametro de consulta "direccion" y retorna una lista de clientes
     public List<Cliente> listarOriginal() {
@@ -34,5 +32,10 @@ public class ClienteController{
      @GetMapping("/endpoint-bubbleSort")
     public List<Cliente> listarBubbleSort(){
         return lista.bubbleSort();
+    }
+
+     @GetMapping("/endpoint-selectionSort")
+    public List<Cliente> listarSelectionSort(){
+        return lista.selectionSort();
     }
 }
