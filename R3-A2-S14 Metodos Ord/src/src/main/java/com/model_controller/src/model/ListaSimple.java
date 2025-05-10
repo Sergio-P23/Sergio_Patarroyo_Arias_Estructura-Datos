@@ -1,7 +1,9 @@
 package com.model_controller.src.model;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 public class ListaSimple {
@@ -242,49 +244,64 @@ public class ListaSimple {
     }
 
     // Método para obtener los pasos intermedios del algoritmo QuickSort
-    public List<List<Integer>> getQuickSortSteps() {
+    public List<Map<String, Object>> getQuickSortSteps() {
         List<Cliente> copia = new ArrayList<>(listaOriginal);
-        List<List<Integer>> pasos = new ArrayList<>();
+        List<Map<String, Object>> pasos = new ArrayList<>();
 
-        // Agregar la lista original como el primer paso
-        pasos.add(copia.stream().map(Cliente::getCedula).collect(Collectors.toList()));
+        // Primer paso: lista original
+        Map<String, Object> primerPaso = new HashMap<>();
+        primerPaso.put("tipo", "estado");
+        primerPaso.put("valores", copia.stream().map(Cliente::getCedula).collect(Collectors.toList()));
+        pasos.add(primerPaso);
 
         quickSortHelper(copia, 0, copia.size() - 1, pasos);
+
+        // Último paso: lista final ordenada
+        Map<String, Object> pasoFinal = new HashMap<>();
+        pasoFinal.put("tipo", "estado");
+        pasoFinal.put("valores", copia.stream().map(Cliente::getCedula).collect(Collectors.toList()));
+        pasos.add(pasoFinal);
+
         return pasos;
     }
 
-    private void quickSortHelper(List<Cliente> clientes, int inicio, int fin, List<List<Integer>> pasos) {
+    private void quickSortHelper(List<Cliente> clientes, int inicio, int fin, List<Map<String, Object>> pasos) {
         if (inicio < fin) {
-            // Obtenemos el índice del pivote después de la partición
             int indicePivote = particion(clientes, inicio, fin, pasos);
-
-            // Ordenamos recursivamente las sublistas izquierda y derecha
             quickSortHelper(clientes, inicio, indicePivote - 1, pasos);
             quickSortHelper(clientes, indicePivote + 1, fin, pasos);
         }
     }
 
-    private int particion(List<Cliente> clientes, int inicio, int fin, List<List<Integer>> pasos) {
+    private int particion(List<Cliente> clientes, int inicio, int fin, List<Map<String, Object>> pasos) {
         Cliente pivote = clientes.get(fin);
         int i = inicio - 1;
 
         for (int j = inicio; j < fin; j++) {
             if (clientes.get(j).getCedula() <= pivote.getCedula()) {
                 i++;
-                // Intercambiar elementos
                 Cliente temp = clientes.get(i);
                 clientes.set(i, clientes.get(j));
                 clientes.set(j, temp);
             }
         }
 
-        // Colocar el pivote en su posición correcta
         Cliente temp = clientes.get(i + 1);
         clientes.set(i + 1, clientes.get(fin));
         clientes.set(fin, temp);
 
-        // Guardar el estado actual después de la partición
-        pasos.add(clientes.stream().map(Cliente::getCedula).collect(Collectors.toList()));
+        // Guardar el pivote
+        Map<String, Object> pasoPivote = new HashMap<>();
+        pasoPivote.put("tipo", "pivote");
+        pasoPivote.put("valor", pivote.getCedula());
+        pasos.add(pasoPivote);
+
+        // Guardar el estado actual de la lista
+        Map<String, Object> pasoEstado = new HashMap<>();
+        pasoEstado.put("tipo", "estado");
+        pasoEstado.put("valores", clientes.stream().map(Cliente::getCedula).collect(Collectors.toList()));
+        pasos.add(pasoEstado);
+
         return i + 1;
     }
 

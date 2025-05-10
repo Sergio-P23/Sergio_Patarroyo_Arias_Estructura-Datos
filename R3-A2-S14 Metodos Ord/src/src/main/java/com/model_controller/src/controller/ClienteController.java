@@ -76,11 +76,11 @@ public class ClienteController {
 
     @GetMapping("/endpoint-quickSortEx")
     public Map<String, Object> listarQuickSortEx() {
-        List<List<Integer>> pasos = lista.getQuickSortSteps(); // Método que devuelve los pasos
-        List<Cliente> clientesOrdenados = lista.quickSort(); // Lista final ordenada
+        List<Map<String, Object>> pasos = lista.getQuickSortSteps(); // ← ✅ nuevo tipo correcto
+        List<Cliente> clientesOrdenados = lista.quickSort();
 
         Map<String, Object> response = new HashMap<>();
-        response.put("pasos", pasos);
+        response.put("pasos", pasos); // pasos con información tipo y valores/pivote
         response.put("ordenado", clientesOrdenados.stream().map(Cliente::getCedula).collect(Collectors.toList()));
         return response;
     }

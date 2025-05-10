@@ -450,13 +450,24 @@
                 const cedulasFinal = dataEx.ordenado;
                 const texto = 'El método "QuickSort" selecciona un pivote y divide la lista en dos partes: una con elementos menores y otra con mayores. Luego ordena recursivamente ambas partes.';
 
+                let pasosHTML = '';
+                let iteracion = 1;
+
+                pasos.forEach(p => {
+                    if (p.tipo === 'pivote') {
+                        pasosHTML += `<li class="text-danger"><em>Pivote usado:</em> ${p.valor}</li>`;
+                    } else if (p.tipo === 'estado') {
+                        pasosHTML += `<li><strong>Iteración ${iteracion++}:</strong> ${p.valores.join(', ')}</li>`;
+                    }
+                });
+
                 document.getElementById('explicacionTexto').innerHTML = `
-            <p>${texto}</p>
-            <h5>Pasos del algoritmo:</h5>
-            <ul>${pasos.map((p, i) => `<li><strong>Iteración ${i + 1}:</strong> ${p.join(', ')}</li>`).join('')}</ul>
-            <h5>Lista final ordenada:</h5>
-            <p>${cedulasFinal.join(', ')}</p>
-        `;
+    <p>${texto}</p>
+    <h5>Pasos del algoritmo:</h5>
+    <ul>${pasosHTML}</ul>
+    <h5>Lista final ordenada:</h5>
+    <p>${cedulasFinal.join(', ')}</p>
+`;
 
                 mostrarClientes(dataLista);
                 const modal = new bootstrap.Modal(document.getElementById('explicacionModal'));
