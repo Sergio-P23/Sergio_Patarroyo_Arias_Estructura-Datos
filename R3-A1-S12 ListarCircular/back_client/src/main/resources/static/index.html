@@ -367,10 +367,19 @@
                 const explicacion = data.explicacion;
                 if (explicacion) {
                     document.getElementById('explicacionTexto').innerHTML = `
-                <p><strong>Método:</strong> ${explicacion.metodo}</p>
-                <p><strong>Primer nodo:</strong> ${explicacion.primerNodo}</p>
-                <p><strong>Último nodo:</strong> ${explicacion.ultimoNodo}</p>
-            `;
+    <div class="mb-3">
+        <h5 class="text-primary">Método utilizado</h5>
+        <p>${explicacion.metodo}</p>
+    </div>
+    <div class="mb-2">
+        <h6 class="text-success">🟢 Primer Nodo</h6>
+        <p><strong>Cliente:</strong> <code>${explicacion.primerNodo}</code><br>
+    </div>
+    <div class="mb-2">
+        <h6 class="text-danger">🔴 Último Nodo</h6>
+        <p><strong>Cliente:</strong> <code>${explicacion.ultimoNodo}</code><br>
+    </div>
+`;
                     const modal = new bootstrap.Modal(document.getElementById('explicacionModal'));
                     modal.show();
                 }

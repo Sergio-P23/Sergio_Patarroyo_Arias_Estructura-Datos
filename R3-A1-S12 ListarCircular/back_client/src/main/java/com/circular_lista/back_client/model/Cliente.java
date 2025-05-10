@@ -27,4 +27,8 @@ public class Cliente {
         return nombre;
     }
 
+    public String mostrarDatos() {
+    return "Cédula: " + cedula + ", Nombre: " + nombre;
+}
+
 }

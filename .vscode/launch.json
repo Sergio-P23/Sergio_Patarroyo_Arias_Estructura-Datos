@@ -19,6 +19,16 @@
             "projectName": "src",
             "args": "",
             "envFile": "${workspaceFolder}/.env"
+        },
+        {
+            "type": "java",
+            "name": "Spring Boot-BackClientApplication<back_client>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "com.circular_lista.back_client.BackClientApplication",
+            "projectName": "back_client",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
         }
     ]
 }
