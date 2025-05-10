@@ -188,87 +188,54 @@ public class ListaSimple {
 
     // Método para obtener los pasos intermedios del algoritmo Bubble Sort
     public List<List<Integer>> getBubbleSortSteps() {
+        List<Cliente> copia = new ArrayList<>(listaOriginal);
         List<List<Integer>> pasos = new ArrayList<>();
-        if (cabeza == null || cabeza.siguiente == null) {
-            // Si la lista está vacía o tiene un solo elemento, no hay pasos que registrar
-            return pasos;
-        }
+
+        // Agregar la lista original como el primer paso
+        pasos.add(copia.stream().map(Cliente::getCedula).collect(Collectors.toList()));
 
         boolean huboIntercambio;
         do {
-            Nodo actual = cabeza;
-            Nodo siguiente = cabeza.siguiente;
             huboIntercambio = false;
-
-            while (siguiente != null) {
-                // Comparamos los clientes por cédula
-                if (actual.cliente.getCedula() > siguiente.cliente.getCedula()) {
-                    // Intercambiamos los datos de los nodos
-                    Cliente temp = actual.cliente;
-                    actual.cliente = siguiente.cliente;
-                    siguiente.cliente = temp;
+            for (int i = 0; i < copia.size() - 1; i++) {
+                if (copia.get(i).getCedula() > copia.get(i + 1).getCedula()) {
+                    // Intercambiar elementos
+                    Cliente temp = copia.get(i);
+                    copia.set(i, copia.get(i + 1));
+                    copia.set(i + 1, temp);
                     huboIntercambio = true;
                 }
-
-                // Avanzamos al siguiente par de nodos
-                actual = siguiente;
-                siguiente = siguiente.siguiente;
             }
-
-            // Registramos el estado actual de la lista
-            pasos.add(new ArrayList<>(getCedulas()));
-        } while (huboIntercambio); // Repetimos mientras haya intercambios
+            // Guardar el estado actual después de cada iteración
+            pasos.add(copia.stream().map(Cliente::getCedula).collect(Collectors.toList()));
+        } while (huboIntercambio);
 
         return pasos;
     }
 
-    // Método auxiliar para obtener las cédulas de los clientes en la lista actual
-    private List<Integer> getCedulas() {
-        List<Integer> cedulas = new ArrayList<>();
-        Nodo actual = cabeza;
-
-        while (actual != null) {
-            cedulas.add(actual.cliente.getCedula());
-            actual = actual.siguiente;
-        }
-
-        return cedulas;
-    }
-
     // Método para obtener los pasos intermedios del algoritmo Selection Sort
     public List<List<Integer>> getSelectionSortSteps() {
+        List<Cliente> copia = new ArrayList<>(listaOriginal);
         List<List<Integer>> pasos = new ArrayList<>();
-        if (cabeza == null || cabeza.siguiente == null) {
-            // Si la lista está vacía o tiene un solo elemento, no hay pasos que registrar
-            return pasos;
-        }
 
-        Nodo actual = cabeza;
+        // Agregar la lista original como el primer paso
+        pasos.add(copia.stream().map(Cliente::getCedula).collect(Collectors.toList()));
 
-        while (actual != null) {
-            Nodo menor = actual;
-            Nodo siguiente = actual.siguiente;
-
-            // Encontramos el nodo con el menor valor de cédula en el resto de la lista
-            while (siguiente != null) {
-                if (siguiente.cliente.getCedula() < menor.cliente.getCedula()) {
-                    menor = siguiente;
+        for (int i = 0; i < copia.size() - 1; i++) {
+            int minIdx = i;
+            for (int j = i + 1; j < copia.size(); j++) {
+                if (copia.get(j).getCedula() < copia.get(minIdx).getCedula()) {
+                    minIdx = j;
                 }
-                siguiente = siguiente.siguiente;
             }
-
-            // Intercambiamos los datos del nodo actual con el nodo menor
-            if (menor != actual) {
-                Cliente temp = actual.cliente;
-                actual.cliente = menor.cliente;
-                menor.cliente = temp;
+            if (minIdx != i) {
+                // Intercambiar elementos
+                Cliente temp = copia.get(i);
+                copia.set(i, copia.get(minIdx));
+                copia.set(minIdx, temp);
             }
-
-            // Registramos el estado actual de la lista
-            pasos.add(new ArrayList<>(getCedulas()));
-
-            // Avanzamos al siguiente nodo
-            actual = actual.siguiente;
+            // Guardar el estado actual después de cada iteración
+            pasos.add(copia.stream().map(Cliente::getCedula).collect(Collectors.toList()));
         }
 
         return pasos;
@@ -276,20 +243,16 @@ public class ListaSimple {
 
     // Método para obtener los pasos intermedios del algoritmo QuickSort
     public List<List<Integer>> getQuickSortSteps() {
+        List<Cliente> copia = new ArrayList<>(listaOriginal);
         List<List<Integer>> pasos = new ArrayList<>();
-        if (cabeza == null || cabeza.siguiente == null) {
-            // Si la lista está vacía o tiene un solo elemento, no hay pasos que registrar
-            return pasos;
-        }
 
-        // Convertimos la lista enlazada a una lista auxiliar para facilitar el manejo
-        List<Cliente> clientes = getClientes();
-        quickSortHelper(clientes, 0, clientes.size() - 1, pasos);
+        // Agregar la lista original como el primer paso
+        pasos.add(copia.stream().map(Cliente::getCedula).collect(Collectors.toList()));
 
+        quickSortHelper(copia, 0, copia.size() - 1, pasos);
         return pasos;
     }
 
-    // Método auxiliar para realizar QuickSort y registrar los pasos
     private void quickSortHelper(List<Cliente> clientes, int inicio, int fin, List<List<Integer>> pasos) {
         if (inicio < fin) {
             // Obtenemos el índice del pivote después de la partición
@@ -301,30 +264,27 @@ public class ListaSimple {
         }
     }
 
-    // Método para particionar la lista y registrar los pasos
     private int particion(List<Cliente> clientes, int inicio, int fin, List<List<Integer>> pasos) {
-        Cliente pivote = clientes.get(fin); // Elegimos el último elemento como pivote
+        Cliente pivote = clientes.get(fin);
         int i = inicio - 1;
 
         for (int j = inicio; j < fin; j++) {
             if (clientes.get(j).getCedula() <= pivote.getCedula()) {
                 i++;
-                // Intercambiamos los elementos
+                // Intercambiar elementos
                 Cliente temp = clientes.get(i);
                 clientes.set(i, clientes.get(j));
                 clientes.set(j, temp);
             }
         }
 
-        // Colocamos el pivote en su posición correcta
+        // Colocar el pivote en su posición correcta
         Cliente temp = clientes.get(i + 1);
         clientes.set(i + 1, clientes.get(fin));
         clientes.set(fin, temp);
 
-        // Registramos el estado actual de la lista
-        pasos.add(new ArrayList<>(clientes.stream().map(Cliente::getCedula).collect(Collectors.toList())));
-
-
+        // Guardar el estado actual después de la partición
+        pasos.add(clientes.stream().map(Cliente::getCedula).collect(Collectors.toList()));
         return i + 1;
     }
 
