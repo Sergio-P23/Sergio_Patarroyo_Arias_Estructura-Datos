@@ -1,10 +1,10 @@
-package com.lista_circular.src;
+package com.circular_lista.back_client;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class SrcApplicationTests {
+class BackClientApplicationTests {
 
 	@Test
 	void contextLoads() {
