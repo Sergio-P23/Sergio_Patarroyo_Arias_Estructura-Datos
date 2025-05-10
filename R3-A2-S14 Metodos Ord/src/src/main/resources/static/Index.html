@@ -297,7 +297,7 @@
         const resultContainer = document.getElementById('resultContainer');
         const contadorClientes = document.getElementById('contadorClientes');
 
-        
+
 
         // Función para mostrar mensajes
         function mostrarMensaje(mensaje, tipo = 'info') {
@@ -315,66 +315,6 @@
                 </div>
             `;
         }
-
-        // Función para mostrar la explicación en el modal
-        // Función para mostrar la explicación en el modal
-        async function mostrarExplicacion(metodo) {
-            const explicacionTexto = document.getElementById('explicacionTexto');
-            let texto = '';
-            let pasos = [];
-
-            try {
-                // Realiza una solicitud al backend para obtener los pasos del algoritmo
-                console.log(`Llamando al endpoint: /endpoint-${metodo}`);
-        const response = await fetch(`/endpoint-${metodo}`);
-        console.log(`Estado de la respuesta: ${response.status}`);
-                if (!response.ok) throw new Error('Error al obtener los datos del servidor.');
-                const data = await response.json();
-
-                pasos = data.pasos; // Pasos intermedios del algoritmo
-                const clientesOrdenados = data.ordenado; // Lista final ordenada
-
-                switch (metodo) {
-                    case 'listarOriginalEx':
-                        texto = 'El método "Listar Original" muestra los clientes en el orden en que fueron agregados a la lista.';
-                        break;
-                    case 'bubbleSortEx':
-                        texto = 'El método "BubbleSort" compara pares de elementos adyacentes y los intercambia si están en el orden incorrecto. Este proceso se repite hasta que la lista esté completamente ordenada.';
-                        break;
-                    case 'selectionSortEx':
-                        texto = 'El método "SelectionSort" encuentra el elemento más pequeño en la lista y lo coloca en la posición inicial. Luego repite este proceso para el resto de la lista.';
-                        break;
-                    case 'quickSortEx':
-                        texto = 'El método "QuickSort" selecciona un elemento como pivote y divide la lista en dos partes: una con elementos menores al pivote y otra con elementos mayores. Luego ordena recursivamente ambas partes.';
-                        break;
-                    default:
-                        texto = 'Método no reconocido.';
-                }
-
-                // Mostrar los pasos en el modal
-                explicacionTexto.innerHTML = `
-            <p>${texto}</p>
-            <h5>Pasos del algoritmo:</h5>
-            <ul>
-                ${pasos.map((paso, index) => `<li><strong>Iteración ${index + 1}:</strong> ${paso.join(', ')}</li>`).join('')}
-            </ul>
-            <h5>Lista final ordenada:</h5>
-            <p>${clientesOrdenados.join(', ')}</p>
-        `;
-            } catch (error) {
-                console.error(error);
-                explicacionTexto.textContent = 'Error al obtener los datos del servidor.';
-            }
-
-            // Mostrar el modal
-            const modal = new bootstrap.Modal(document.getElementById('explicacionModal'));
-            modal.show();
-        }
-
-    
-
-
-
 
         // Función para mostrar lista simplemente enlazada
         function mostrarClientes(clientes) {
@@ -435,10 +375,29 @@
         // Bubble sort
         btnBubbleSort.addEventListener('click', async () => {
             try {
-                const response = await fetch('/endpoint-bubbleSort');
-                if (!response.ok) throw new Error('No se pudo obtener la listar con Bubblesort.');
-                const clientes = await response.json();
-                mostrarClientes(clientes);
+                const responseEx = await fetch('/endpoint-bubbleSortEx');
+                const responseLista = await fetch('/endpoint-bubbleSort');
+                if (!responseEx.ok || !responseLista.ok) throw new Error('Error al obtener datos del servidor.');
+
+                const dataEx = await responseEx.json();
+                const dataLista = await responseLista.json();
+
+                const pasos = dataEx.pasos;
+                const cedulasFinal = dataEx.ordenado;
+                const texto = 'El método "BubbleSort" compara pares de elementos adyacentes y los intercambia si están en el orden incorrecto. Este proceso se repite hasta que la lista esté completamente ordenada.';
+
+                document.getElementById('explicacionTexto').innerHTML = `
+            <p>${texto}</p>
+            <h5>Pasos del algoritmo:</h5>
+            <ul>${pasos.map((p, i) => `<li><strong>Iteración ${i + 1}:</strong> ${p.join(', ')}</li>`).join('')}</ul>
+            <h5>Lista final ordenada:</h5>
+            <p>${cedulasFinal.join(', ')}</p>
+        `;
+
+                mostrarClientes(dataLista);
+                const modal = new bootstrap.Modal(document.getElementById('explicacionModal'));
+                modal.show();
+
             } catch (error) {
                 console.error(error);
                 mostrarMensaje('Error: ' + error.message, 'error');
@@ -448,10 +407,29 @@
         // Secuencial
         btnSelectionSort.addEventListener('click', async () => {
             try {
-                const response = await fetch('/endpoint-selectionSort');
-                if (!response.ok) throw new Error('No se pudo obtener la listar con Secuencial.');
-                const clientes = await response.json();
-                mostrarClientes(clientes);
+                const responseEx = await fetch('/endpoint-selectionSortEx');
+                const responseLista = await fetch('/endpoint-selectionSort');
+                if (!responseEx.ok || !responseLista.ok) throw new Error('Error al obtener datos del servidor.');
+
+                const dataEx = await responseEx.json();
+                const dataLista = await responseLista.json();
+
+                const pasos = dataEx.pasos;
+                const cedulasFinal = dataEx.ordenado;
+                const texto = 'El método "SelectionSort" encuentra el elemento más pequeño y lo coloca en la posición inicial. Luego repite el proceso para el resto de la lista.';
+
+                document.getElementById('explicacionTexto').innerHTML = `
+            <p>${texto}</p>
+            <h5>Pasos del algoritmo:</h5>
+            <ul>${pasos.map((p, i) => `<li><strong>Iteración ${i + 1}:</strong> ${p.join(', ')}</li>`).join('')}</ul>
+            <h5>Lista final ordenada:</h5>
+            <p>${cedulasFinal.join(', ')}</p>
+        `;
+
+                mostrarClientes(dataLista);
+                const modal = new bootstrap.Modal(document.getElementById('explicacionModal'));
+                modal.show();
+
             } catch (error) {
                 console.error(error);
                 mostrarMensaje('Error: ' + error.message, 'error');
@@ -461,10 +439,29 @@
         // Quicksort
         btnQuickSort.addEventListener('click', async () => {
             try {
-                const response = await fetch('/endpoint-quickSort');
-                if (!response.ok) throw new Error('No se pudo obtener la listar con Quicksort.');
-                const clientes = await response.json();
-                mostrarClientes(clientes);
+                const responseEx = await fetch('/endpoint-quickSortEx');
+                const responseLista = await fetch('/endpoint-quickSort');
+                if (!responseEx.ok || !responseLista.ok) throw new Error('Error al obtener datos del servidor.');
+
+                const dataEx = await responseEx.json();
+                const dataLista = await responseLista.json();
+
+                const pasos = dataEx.pasos;
+                const cedulasFinal = dataEx.ordenado;
+                const texto = 'El método "QuickSort" selecciona un pivote y divide la lista en dos partes: una con elementos menores y otra con mayores. Luego ordena recursivamente ambas partes.';
+
+                document.getElementById('explicacionTexto').innerHTML = `
+            <p>${texto}</p>
+            <h5>Pasos del algoritmo:</h5>
+            <ul>${pasos.map((p, i) => `<li><strong>Iteración ${i + 1}:</strong> ${p.join(', ')}</li>`).join('')}</ul>
+            <h5>Lista final ordenada:</h5>
+            <p>${cedulasFinal.join(', ')}</p>
+        `;
+
+                mostrarClientes(dataLista);
+                const modal = new bootstrap.Modal(document.getElementById('explicacionModal'));
+                modal.show();
+
             } catch (error) {
                 console.error(error);
                 mostrarMensaje('Error: ' + error.message, 'error');
@@ -474,10 +471,26 @@
         // Listar clientes
         btnListarDerecha.addEventListener('click', async () => {
             try {
-                const response = await fetch('/endpoint-listarOriginal');
-                if (!response.ok) throw new Error('No se pudo obtener la lista de clientes.');
-                const clientes = await response.json();
-                mostrarClientes(clientes);
+                const responseEx = await fetch('/endpoint-listarOriginalEx');
+                const responseLista = await fetch('/endpoint-listarOriginal');
+                if (!responseEx.ok || !responseLista.ok) throw new Error('Error al obtener datos del servidor.');
+
+                const dataEx = await responseEx.json();
+                const dataLista = await responseLista.json();
+
+                const texto = 'El método "Listar Original" muestra los clientes en el orden en que fueron agregados a la lista.';
+                const cedulas = dataEx.original;
+
+                document.getElementById('explicacionTexto').innerHTML = `
+            <p>${texto}</p>
+            <h5>Lista original:</h5>
+            <p>${cedulas.join(', ')}</p>
+        `;
+
+                mostrarClientes(dataLista);
+                const modal = new bootstrap.Modal(document.getElementById('explicacionModal'));
+                modal.show();
+
             } catch (error) {
                 console.error(error);
                 mostrarMensaje('Error: ' + error.message, 'error');

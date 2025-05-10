@@ -216,7 +216,7 @@ public class ListaSimple {
             }
 
             // Registramos el estado actual de la lista
-            pasos.add(getCedulas());
+            pasos.add(new ArrayList<>(getCedulas()));
         } while (huboIntercambio); // Repetimos mientras haya intercambios
 
         return pasos;
@@ -265,7 +265,7 @@ public class ListaSimple {
             }
 
             // Registramos el estado actual de la lista
-            pasos.add(getCedulas());
+            pasos.add(new ArrayList<>(getCedulas()));
 
             // Avanzamos al siguiente nodo
             actual = actual.siguiente;
@@ -322,7 +322,8 @@ public class ListaSimple {
         clientes.set(fin, temp);
 
         // Registramos el estado actual de la lista
-        pasos.add(clientes.stream().map(Cliente::getCedula).collect(Collectors.toList()));
+        pasos.add(new ArrayList<>(clientes.stream().map(Cliente::getCedula).collect(Collectors.toList())));
+
 
         return i + 1;
     }
