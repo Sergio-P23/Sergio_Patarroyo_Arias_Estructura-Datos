@@ -21,6 +21,7 @@
         <module>R2-A3-S10 Construyendo TDA/cliente</module>
         <module>R3-A1-S12 ListarCircular/back_client</module>
         <module>R3-A2-S14 Metodos Ord/src</module>
+        <module>R3-A4-S14 Push and Pop/back_bicola</module>
     </modules>
 
     <dependencyManagement>
