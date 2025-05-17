@@ -33,7 +33,7 @@ document.getElementById('btn-decrementar').addEventListener('click', () => {
 
 
 
-document.getElementById('btn-ordenar').addEventListener('click', () => {
+document.getElementById('btn-ordenar').addEventListener('click', async () => {
     if (numDiscos === 1) {
         const torre1 = document.getElementById('torre-1');
         const torre3 = document.getElementById('torre-3');
@@ -49,7 +49,39 @@ document.getElementById('btn-ordenar').addEventListener('click', () => {
             torre3.appendChild(disco);
         }
     } else {
-        alert("Aquí iría la lógica para mover los discos automáticamente 😄");
+         // Lógica recursiva para mover los discos automáticamente
+        function moverDiscoVisual(origen, destino) {
+            const torreOrigen = document.getElementById(`torre-${origen}`);
+            const torreDestino = document.getElementById(`torre-${destino}`);
+            const disco = torreOrigen.lastElementChild;
+            if (disco) {
+                const alturaTorreDestino = torreDestino.childElementCount;
+                disco.style.bottom = `${alturaTorreDestino * 22}px`;
+                torreDestino.appendChild(disco);
+            }
+        }
+
+        function hanoi(n, origen, auxiliar, destino, movimientos) {
+            if (n === 1) {
+                movimientos.push([origen, destino]);
+            } else {
+                hanoi(n - 1, origen, destino, auxiliar, movimientos);
+                movimientos.push([origen, destino]);
+                hanoi(n - 1, auxiliar, origen, destino, movimientos);
+            }
+        }
+
+        async function ejecutarMovimientos(movimientos, delay = 500) {
+            for (const [origen, destino] of movimientos) {
+                moverDiscoVisual(origen, destino);
+                await new Promise(res => setTimeout(res, delay));
+            }
+        }
+
+        // Prepara y ejecuta los movimientos
+        const movimientos = [];
+        hanoi(numDiscos, 1, 2, 3, movimientos);
+        await ejecutarMovimientos(movimientos, 500);
     }
 });
 
