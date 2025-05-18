@@ -11,12 +11,18 @@ import java.util.List;
 @CrossOrigin(origins = "*")
 public class BicolaController {
 
-    private final Bicola bicola = new Bicola();
+    private static final Bicola bicola = new Bicola();
 
     // Insertar cliente por la derecha
     @PostMapping("/insertar")
     public void insertar(@RequestBody Cliente cliente) {
-        bicola.insertar(cliente);
+        bicola.insertarDerecha(cliente);
+    }
+
+    // Insertar cliente por la izquierda
+    @PostMapping("/insertarIzq")
+    public void insertarIzq(@RequestBody Cliente cliente) {
+        bicola.insertarIzquierda(cliente);
     }
 
     // Atender por la izquierda (cabeza)

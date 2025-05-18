@@ -14,11 +14,6 @@ public class Bicola {
         numElem = 0;
     }
 
-         cabeza = null;
-        ultimo = null;
-        numElem = 0;
-    }
-
     // Insertar por la izquierda (frente)
     public void insertarIzquierda(Cliente cliente) {
         Nodo nuevo = new Nodo(cliente);
@@ -44,7 +39,6 @@ public class Bicola {
         }
         numElem++;
     }
-
 
     // Atender por la izquierda (cabeza)
     public Cliente atenderIzq() {

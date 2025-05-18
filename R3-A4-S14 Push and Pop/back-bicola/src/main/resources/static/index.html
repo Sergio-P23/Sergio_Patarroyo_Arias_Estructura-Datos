@@ -155,7 +155,8 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                    <button type="button" class="btn btn-primary" id="btnGuardarCliente">Guardar</button>
+                    <button type="button" class="btn btn-success" id="btnInsertarIzq">Guardar por la izquierda</button>
+                    <button type="button" class="btn btn-primary" id="btnGuardarCliente">Guardar por la derecha</button>
                 </div>
             </div>
         </div>
@@ -287,7 +288,12 @@
             try {
                 const response = await fetch('/bicola/atenderIzq', { method: 'DELETE' });
                 if (!response.ok) throw new Error('No hay clientes para atender por la izquierda');
-                const cliente = await response.json();
+                const text = await response.text();
+                if (!text) {
+                    mostrarMensaje('No hay clientes para atender por la izquierda', 'warning');
+                    return;
+                }
+                const cliente = JSON.parse(text);
                 mostrarMensaje(`Atendido por la izquierda: ${cliente.nombre} (${cliente.cedula})`, 'info');
                 btnListar.click();
             } catch (error) {
