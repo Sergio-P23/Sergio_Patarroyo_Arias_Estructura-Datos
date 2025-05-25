@@ -1,178 +1,213 @@
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
-    <meta charset="UTF-8" />
-    <title>Árbol Binario</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
-    <style>
-        .tree ul {
-            padding-top: 20px;
-            display: flex;
-            justify-content: center;
-        }
+  <meta charset="UTF-8" />
+  <title>Árbol Binario por Niveles</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <style>
+    .tree ul {
+      padding-top: 20px;
+      display: flex;
+      justify-content: center;
+    }
 
-        .tree li {
-            list-style-type: none;
-            text-align: center;
-            position: relative;
-            padding: 20px 5px 0 5px;
-        }
+    .tree li {
+      list-style-type: none;
+      text-align: center;
+      position: relative;
+      padding: 20px 5px 0 5px;
+    }
 
-        .tree li::before,
-        .tree li::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            width: 50%;
-            height: 20px;
-            border-top: 2px solid #ccc;
-        }
+    .tree li::before, .tree li::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      width: 50%;
+      height: 20px;
+      border-top: 2px solid #ccc;
+    }
 
-        .tree li::before {
-            right: 50%;
-            border-right: 2px solid #ccc;
-        }
+    .tree li::before { right: 50%; border-right: 2px solid #ccc; }
+    .tree li::after  { left: 50%; border-left: 2px solid #ccc; }
 
-        .tree li::after {
-            left: 50%;
-            border-left: 2px solid #ccc;
-        }
+    .tree li:only-child::before,
+    .tree li:only-child::after { display: none; }
 
-        .tree li:only-child::before,
-        .tree li:only-child::after {
-            display: none;
-        }
-
-        .tree li>span {
-            display: inline-block;
-            padding: 8px 12px;
-            border: 2px solid #0d6efd;
-            border-radius: 8px;
-            background-color: #e9f0fa;
-            color: #0d6efd;
-            font-weight: bold;
-        }
-    </style>
+    .tree li > span {
+      display: inline-block;
+      padding: 8px 12px;
+      border: 2px solid #0d6efd;
+      border-radius: 8px;
+      background-color: #e9f0fa;
+      color: #0d6efd;
+      font-weight: bold;
+    }
+  </style>
 </head>
-
 <body class="bg-light">
-    <div class="container py-5">
-        <div class="card shadow-lg">
-            <div class="card-body">
-                <h1 class="card-title text-center mb-4">Árbol Binario por Niveles</h1>
-                <input type="number" id="inputValor" class="form-control mb-3" placeholder="Ingrese un número" />
-                <div class="text-center mb-3">
-                    <button class="btn btn-success" onclick="insertar()">Insertar dato</button>
-                </div>
-                <div id="output" class="alert alert-info mb-3" style="white-space: pre;"></div>
-                <h5 class="text-center">Visualización del Árbol</h5>
-                <div id="visual" class="tree text-center"></div>
-            </div>
+  <div class="container py-5">
+    <div class="card shadow-lg">
+      <div class="card-body">
+        <h1 class="card-title text-center mb-4">Árbol Binario por Niveles</h1>
+        <input type="number" id="inputValor" class="form-control mb-3" placeholder="Ingrese un número" />
+        <div class="text-center mb-3">
+          <button class="btn btn-success" onclick="insertar()">Insertar dato</button>
         </div>
+        <div id="output" class="alert alert-info mb-3" style="white-space: pre;"></div>
+        <div class="text-center mb-3">
+          <button class="btn btn-primary" onclick="mostrarRecorrido('inorden')">Recorrido Inorden</button>
+          <button class="btn btn-primary" onclick="mostrarRecorrido('preorden')">Recorrido Preorden</button>
+          <button class="btn btn-primary" onclick="mostrarRecorrido('postorden')">Recorrido Postorden</button>
+        </div>
+        <h5 class="text-center">Visualización del Árbol</h5>
+        <div id="visual" class="tree text-center"></div>
+      </div>
     </div>
+  </div>
 
-    <script>
-        class Nodo {
-            constructor(valor) {
-                this.valor = valor;
-                this.izq = null;
-                this.der = null;
-            }
+  <script>
+    class Nodo {
+      constructor(valor) {
+        this.valor = valor;
+        this.izq = null;
+        this.der = null;
+      }
+    }
+
+    class ArbolBinario {
+      constructor() {
+        this.raiz = null;
+      }
+
+      insertar(valor) {
+        const nuevo = new Nodo(valor);
+        if (!this.raiz) {
+          this.raiz = nuevo;
+          return;
         }
 
-        class ArbolBinario{
-            constructor() {
-                this.raiz = null;
-            }
+        const cola = [this.raiz];
+        while (cola.length) {
+          const actual = cola.shift();
+          if (!actual.izq) {
+            actual.izq = nuevo;
+            return;
+          } else {
+            cola.push(actual.izq);
+          }
 
-            insertar(valor) {
-                const nuevo = new Nodo(valor);
-                if (!this.raiz) {
-                    this.raiz = nuevo;
-                    return;
-                }
+          if (!actual.der) {
+            actual.der = nuevo;
+            return;
+          } else {
+            cola.push(actual.der);
+          }
+        }
+      }
 
-                const cola = [this.raiz];
-                while (cola.length) {
-                    const actual = cola.shift();
-                    if (!actual.izq) {
-                        actual.izq = nuevo;
-                        return;
-                    } else {
-                        cola.push(actual.izq);
-                    }
+      inorden(nodo = this.raiz, resultado = []) {
+        if (nodo) {
+          this.inorden(nodo.izq, resultado);
+          resultado.push(nodo.valor);
+          this.inorden(nodo.der, resultado);
+        }
+        return resultado;
+      }
 
-                    if (!actual.der) {
-                        actual.der = nuevo;
-                        return;
-                    } else {
-                        cola.push(actual.der);
-                    }
-                }
-            }
+      preorden(nodo = this.raiz, resultado = []) {
+        if (nodo) {
+          resultado.push(nodo.valor);
+          this.preorden(nodo.izq, resultado);
+          this.preorden(nodo.der, resultado);
+        }
+        return resultado;
+      }
+
+      postorden(nodo = this.raiz, resultado = []) {
+        if (nodo) {
+          this.postorden(nodo.izq, resultado);
+          this.postorden(nodo.der, resultado);
+          resultado.push(nodo.valor);
+        }
+        return resultado;
+      }
+    }
+
+    const arbol = new ArbolBinario();
+
+    function insertar() {
+      const valor = parseInt(document.getElementById("inputValor").value);
+      if (!isNaN(valor)) {
+        arbol.insertar(valor);
+        mostrar(`✅ Dato ${valor} insertado correctamente.`);
+        renderizarArbol();
+        document.getElementById("inputValor").value = "";
+      } else {
+        mostrar("⚠️ Por favor ingrese un número válido.");
+      }
+    }
+
+    function mostrar(texto) {
+      document.getElementById("output").textContent = texto;
+    }
+
+    function mostrarRecorrido(tipo) {
+      let resultado;
+      switch (tipo) {
+        case 'inorden':
+          resultado = arbol.inorden().join(' → ');
+          break;
+        case 'preorden':
+          resultado = arbol.preorden().join(' → ');
+          break;
+        case 'postorden':
+          resultado = arbol.postorden().join(' → ');
+          break;
+      }
+      mostrar(`🔍 Recorrido ${tipo}: ${resultado}`);
+    }
+
+    function renderizarArbol() {
+      const contenedor = document.getElementById("visual");
+      contenedor.innerHTML = "";
+      if (arbol.raiz) {
+        const raizLi = crearHTML(arbol.raiz);
+        const raizUl = document.createElement("ul");
+        raizUl.appendChild(raizLi);
+        contenedor.appendChild(raizUl);
+      }
+    }
+
+    function crearHTML(nodo) {
+      const li = document.createElement("li");
+      const span = document.createElement("span");
+      span.textContent = nodo.valor;
+      li.appendChild(span);
+
+      if (nodo.izq || nodo.der) {
+        const ul = document.createElement("ul");
+
+        if (nodo.izq) {
+          ul.appendChild(crearHTML(nodo.izq));
+        } else {
+          const vacio = document.createElement("li");
+          vacio.innerHTML = "<span style='visibility:hidden'>x</span>";
+          ul.appendChild(vacio);
         }
 
-        const arbol = new ArbolBinario();
-
-        function insertar() {
-            const valor = parseInt(document.getElementById("inputValor").value);
-            if (!isNaN(valor)) {
-                arbol.insertar(valor);
-                mostrar(`✅ Dato ${valor} insertado correctamente.`);
-                renderizarArbol();
-                document.getElementById("inputValor").value = "";
-            } else {
-                mostrar("⚠️ Por favor ingrese un número válido.");
-            }
+        if (nodo.der) {
+          ul.appendChild(crearHTML(nodo.der));
+        } else {
+          const vacio = document.createElement("li");
+          vacio.innerHTML = "<span style='visibility:hidden'>x</span>";
+          ul.appendChild(vacio);
         }
 
-        function mostrar(texto) {
-            document.getElementById("output").textContent = texto;
-        }
+        li.appendChild(ul);
+      }
 
-        function renderizarArbol() {
-            const contenedor = document.getElementById("visual");
-            contenedor.innerHTML = "";
-            if (arbol.raiz) {
-                const raizLi = crearHTML(arbol.raiz);
-                const raizUl = document.createElement("ul");
-                raizUl.appendChild(raizLi);
-                contenedor.appendChild(raizUl);
-            }
-        }
-
-        function crearHTML(nodo) {
-            const li = document.createElement("li");
-            const span = document.createElement("span");
-            span.textContent = nodo.valor;
-            li.appendChild(span);
-
-            if (nodo.izq || nodo.der) {
-                const ul = document.createElement("ul");
-
-                if (nodo.izq) {
-                    ul.appendChild(crearHTML(nodo.izq));
-                } else {
-                    const vacio = document.createElement("li");
-                    vacio.innerHTML = "<span style='visibility:hidden'>x</span>";
-                    ul.appendChild(vacio);
-                }
-
-                if (nodo.der) {
-                    ul.appendChild(crearHTML(nodo.der));
-                } else {
-                    const vacio = document.createElement("li");
-                    vacio.innerHTML = "<span style='visibility:hidden'>x</span>";
-                    ul.appendChild(vacio);
-                }
-
-                li.appendChild(ul);
-            }
-
-            return li;
-        }
-    </script>
+      return li;
+    }
+  </script>
 </body>
-
 </html>
