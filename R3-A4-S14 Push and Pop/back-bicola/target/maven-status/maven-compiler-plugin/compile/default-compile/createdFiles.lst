@@ -1,0 +1,5 @@
+com\bicola\back_bicola\BackBicolaApplication.class
+com\bicola\back_bicola\controller\BicolaController.class
+com\bicola\back_bicola\model\Cliente.class
+com\bicola\back_bicola\model\Bicola.class
+com\bicola\back_bicola\model\Nodo.class
